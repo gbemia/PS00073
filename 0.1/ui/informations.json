@@ -16,8 +16,8 @@
     
        {
         "title":{
-            "en": "1- Informations de l’établissement",
-            "fr": "1- Informations de l’établissement"
+            "en": "1- Informations à savoir",
+            "fr": "1- Informations à savoir"
                 }, 
         
             "rows": [
@@ -68,8 +68,8 @@
                   {                         
                     "type": "SUBMIT",
                     "label": {
-                        "fr": "Valider",
-                        "en": "Valider"
+                        "fr": "Continuer",
+                        "en": "Continue"
                     }
                   }
                 ]                   
