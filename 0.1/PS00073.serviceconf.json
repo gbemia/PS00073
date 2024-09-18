@@ -1,0 +1,58 @@
+{
+    "public": true,
+    "serviceId": "PS00073",
+    "serviceVersion": "0.1",
+    "stages": {
+     "start": {
+      "type": "start",
+      "shortTitle": {
+       "en": "STARTED",
+       "fr": "DÉBUT"
+      },
+      "title": {
+       "en": "Application started",
+       "fr": "Demande soumise"
+      },
+      "transitions": {
+       "type": "single",
+       "nextStage": "informations"
+      },
+      "pathTitle": {
+       "en": "Continue application",
+       "fr": "Poursuivre la demande"
+      },
+      "permissions": {
+       "type": "meta-array",
+       "actor": "CITIZEN",
+       "metaPathToArray": [
+        "citizen"
+       ],
+       "public": true
+      }
+     },
+     "informations" : {
+         "type" : "ui",
+         "uiConfiguration" : "informations.json",
+         "transitions" : {
+             "type" : "single",
+             "nextStage" : "formulaire",
+             "onStageException" : {
+                 "REQUIRED_FIELDS_MISSING" : "Informations",
+                 "FIELDS_NOT_ALLOWED" : "Informations"
+             }
+         }
+     },
+     "formulaire" : {
+         "type" : "ui",
+         "uiConfiguration" : "recap.json",
+         "transitions" : {
+             "type" : "single",
+             "nextStage" : "gen-recap-info",
+             "onStageException" : {
+                 "REQUIRED_FIELDS_MISSING" : "formulaire",
+                 "FIELDS_NOT_ALLOWED" : "formulaire"
+             }
+         }
+     }
+    }
+}

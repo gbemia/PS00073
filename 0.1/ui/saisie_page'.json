@@ -1,0 +1,82 @@
+{
+"validation":
+ [
+    {
+      "requiredPaths": 
+      [
+        "metaData.etablissement"
+      ]
+    }    
+ ],
+
+ "allowDrafts": false,
+
+ "steps": 
+ [
+
+   {
+    "title":{
+        "en": "1- Informations générales de l’établissement",
+        "fr": "1- Informations générales de l’établissement"
+            }, 
+    
+        "rows": [
+          {                    
+            "fields": [
+                {
+                    "type": "MARKDOWN_DESCRIPTION",
+                    "label": {
+                        "en": "##### Message d’information:",
+                        "fr": "##### Message d’information:"
+                        }
+                }                      
+            ]    
+          },
+         {                    
+            "fields": [
+                {
+                    "type": "MARKDOWN_DESCRIPTION",
+                    "label": {
+                        "en": "###### Les Préfectures ne sont pas compétentes pour traiter les demandes d’enregistrements \n ###### d’ONG ou Associations de types:",
+                        "fr": "###### Les Préfectures ne sont pas compétentes pour traiter les demandes d’enregistrements \n ###### d’ONG ou Associations de types:"}
+                }      ]
+         },
+        {                    
+          "fields": [
+              {
+                  "type": "MARKDOWN_DESCRIPTION",
+                  "label": {
+                      "en": "###### • Syndicats ;\n ###### • Associations de micro finances ou mutuelles ;\n ###### • Associations des communautés étrangères ;\n ###### • Organisation de bonne gouvernance ;\n ###### • Fondations ;\n ###### • Associations à caractère religieux ;\n ###### • Mouvements à vocation politiques ;\n ###### • Partis ou formations politiques;\n",
+                      "fr": "###### • Syndicats ;\n ###### • Associations de micro finances ou mutuelles ;\n ###### • Associations des communautés étrangères ;\n ###### • Organisation de bonne gouvernance ;\n ###### • Fondations ;\n ###### • Associations à caractère religieux ;\n ###### • Mouvements à vocation politiques ;\n ###### • Partis ou formations politiques;\n"
+                           }
+              }]
+        },
+        {                    
+            "fields": [
+                {
+                    "type": "MARKDOWN_DESCRIPTION",
+                    "label": {
+                        "en": "###### Merci de vous rapprocher du Ministère de l’Intérieur et de la Sécurité Publique pour votre \n ###### demande d’enregistrement dans le cas où votre structure opère dans les champs cités \n ###### ci-dessus.",
+                        "fr": "###### Merci de vous rapprocher du Ministère de l’Intérieur et de la Sécurité Publique pour votre \n ###### demande d’enregistrement dans le cas où votre structure opère dans les champs cités \n ###### ci-dessus."
+                  }
+                }                      
+            ]    
+        },
+        
+        {
+            "fields":[
+              {                         
+                "type": "SUBMIT",
+                "label": {
+                    "fr": "Valider",
+                    "en": "Valider"
+                }
+              }
+            ]                   
+          }
+              ]
+          }
+            
+      ]
+    
+}
