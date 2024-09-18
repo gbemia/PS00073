@@ -44,7 +44,7 @@
      },
      "formulaire" : {
          "type" : "ui",
-         "uiConfiguration" : "recap.json",
+         "uiConfiguration" : "form.json",
          "transitions" : {
              "type" : "single",
              "nextStage" : "gen-recap-info",

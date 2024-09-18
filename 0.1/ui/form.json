@@ -1,0 +1,200 @@
+{
+"validation":
+ [
+    {
+      "requiredPaths": 
+      [
+        "data.company_name",
+        "data.company_type",
+        "data.company_is_group"
+      ]
+    }    
+ ],
+
+ "allowDrafts": false,
+
+ "steps": 
+ [
+
+   {
+    "title":{
+        "en": "1- General informations",
+        "fr": "1- Informations générales"
+            }, 
+    
+        "rows": [
+          {                    
+            "fields": [
+                {
+                    "type": "TEXT",
+                    "path": "data.company_name", 
+                    "label": {
+                        "en": "Name",
+                        "fr": "Nom"
+                        }
+                }                      
+            ]    
+          },
+          {                    
+            "fields": [
+                {
+                    "type": "TEXT",
+                    "path": "data.company_shortname", 
+                    "label": {
+                        "en": "Short name",
+                        "fr": "Sigle"
+                        }
+                },
+                {
+                  "type": "SELECT",
+                  "path": "data.company_type", 
+                  "label": {
+                      "en": "Type",
+                      "fr": "Type"
+                      },
+                  "listValues" : [
+                    {
+                      "label" : {
+                        "en" : "",
+                        "fr" : "Organisation Non Gouvernementale"
+                      },
+                      "value" : "ONG"
+                    },
+                    {
+                      "label" : {
+                        "en" : "",
+                        "fr" : "Association"
+                      },
+                      "value" : "Association"
+                    }
+                  ]
+              },
+              {
+                "type": "SELECT",
+                "path": "data.company_is_group", 
+                "label": {
+                    "en": "Group of associations",
+                    "fr": "Faîtière"
+                    },
+                "listValues" : [
+                  {
+                    "label" : {
+                      "en" : "Yes",
+                      "fr" : "Oui"
+                    },
+                    "value" : "OUI"
+                  },
+                  {
+                    "label" : {
+                      "en" : "No",
+                      "fr" : "Non"
+                    },
+                    "value" : "NON"
+                  }
+                ]
+            }                          
+            ]    
+          }
+              ]
+          },
+    {
+            "title":{
+                "en": "2- Activities and members",
+                "fr": "2- Activités et membres"
+                    }, 
+            
+                "rows": [
+                  {                    
+                    "fields": [
+                        {
+                            "type": "TEXTAREA",
+                            "path": "data.main_objective", 
+                            "label": {
+                                "en": "Main objective",
+                                "fr": "Objectif principal"
+                                }
+                        }                      
+                    ]    
+                  },
+                  {                    
+                    "fields": [
+                        {
+                            "type": "TEXTAREA",
+                            "path": "data.secondary_objectives", 
+                            "label": {
+                                "en": "Secondary objectives",
+                                "fr": "Objectifs secondaires"
+                                }
+                        }                      
+                    ]    
+                  },
+                  {                    
+                    "fields": [
+                      {
+                        "type": "DATE",
+                        "path": "data.assembly_date", 
+                        "label": {
+                            "en": "Assembly date",
+                            "fr": "Date d'assemblée"
+                            }
+                      }                 
+                    ]    
+                  },
+                  {                    
+                    "fields": [
+                      {
+                        "type": "TEXT",
+                        "path": "data.president_name", 
+                        "label": {
+                            "en": "President fullname",
+                            "fr": "Nom complet du Président"
+                            }
+                    } ,
+                        {
+                          "type": "TEXT",
+                          "path": "data.vice_president_name", 
+                          "label": {
+                              "en": "Vice-president fullname",
+                              "fr": "Nom complet du Vice-Président"
+                              }
+                      }                   
+                    ]    
+                  },
+                  {                    
+                    "fields": [
+                      {
+                        "type": "TEXT",
+                        "path": "data.secretary_name", 
+                        "label": {
+                            "en": "Secretary fullname",
+                            "fr": "Nom complet du Secrétaire Général"
+                            }
+                      },
+                        {
+                          "type": "TEXT",
+                          "path": "data.treasurer_name", 
+                          "label": {
+                              "en": "Treasurer fullname",
+                              "fr": "Nom complet du Trésorier"
+                              }
+                      }                     
+                    ]    
+                  },
+                
+                {
+                    "fields":[
+                      {                         
+                        "type": "SUBMIT",
+                        "label": {
+                            "fr": "Continuer",
+                            "en": "Continue"
+                        }
+                      }
+                    ]                   
+                  }
+                      ]
+                  }
+            
+]
+    
+}
