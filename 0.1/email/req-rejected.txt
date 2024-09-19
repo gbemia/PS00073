@@ -1,0 +1,3 @@
+Votre demande d'enregistrement d'${data.companytype} Nº a été rejetée pour les raisons suivantes :
+
+Observations : ${metaData._comment}

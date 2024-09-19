@@ -1,0 +1,11 @@
+Une nouvelle demande d'enregistrement ONG/Assocition vous été transmit depuis le Secrétariat général.
+
+Référence : ${metaData._appRefId}
+
+Nom : ${data.company_name}
+Type : ${data.companytype}
+Président : ${data.activity_pr_name}
+
+Annotation : ${metaData._officialComment}
+
+Lien vers la demande : 
