@@ -173,7 +173,7 @@
             },
             "title": {
                 "en": "REQUESTED",
-                "fr": "REQUESTED"
+                "fr": "DEMANDÉ"
             },
             "flags": [],
             "transitions": [
@@ -182,7 +182,7 @@
                     "nextStage": "secretary",
                     "title": {
                         "en": "REQUESTED",
-                        "fr": "REQUESTED"
+                        "fr": "DEMANDÉ"
                     },
                     "resultMainStages": [
                         "ISSUED",
@@ -236,7 +236,7 @@
             "subjectTemplate": "Votre demande d'enregistrement ONG/Association a été rejetée.",
             "transitions": {
                 "type": "single",
-                "nextStage": "general_secretary"
+                "nextStage": "REJECTED"
             }
         },
         "general_secretary": {
@@ -306,7 +306,7 @@
                     "conformite-review"
                 ],
                 "map": {
-                    "accept": "gen-attestation",
+                    "accept": "ISSUED",
                     "rejected": "email_req_rejected"
                 },
                 "onStageException": {
@@ -314,6 +314,38 @@
                     "FIELDS_NOT_ALLOWED": "prefet"
                 }
             }
+        },
+        "ISSUED": {
+            "type": "main",
+            "shortTitle": {
+                "en": "ACCEPTED",
+                "fr": "ACCEPTÉ"
+            },
+            "title": {
+                "en": "Your request was accepted",
+                "fr": "Votre demande a été approuvée"
+            },
+            "flags": [
+                "final",
+                "accept"
+            ],
+            "transitions": []
+        },
+        "REJECTED": {
+            "type": "main",
+            "shortTitle": {
+                "en": "REQUESTED",
+                "fr": "REJETÉ"
+            },
+            "title": {
+               "en": "Your request was rejected",
+                "fr": "Votre demande a été rejetée"
+            },
+            "flags": [
+                "final",
+                "rejected"
+            ],
+            "transitions": []
         }
     }
 }
