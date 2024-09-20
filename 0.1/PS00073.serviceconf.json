@@ -42,18 +42,6 @@
                 }
             }
         },
-        "informations2": {
-            "type": "ui",
-            "uiConfiguration": "informations2.json",
-            "transitions": {
-                "type": "single",
-                "nextStage": "form",
-                "onStageException": {
-                    "REQUIRED_FIELDS_MISSING": "informations",
-                    "FIELDS_NOT_ALLOWED": "informations"
-                }
-            }
-        },
         "form": {
             "type": "ui",
             "uiConfiguration": "form.json",
@@ -80,18 +68,19 @@
                 ],
                 "map": {
                     "Oui": "payment_faitiere_oui",
-                    "Non": "payment_faitiere_non"
+                    "Non": "payment_faitiere_non",
+                    "*": "cnsr-not-found"
                 }
             }
         },
         "payment_faitiere_oui": {
             "type": "genericpayment",
-            "provider" : "fedapay",
+            "provider": "fedapay",
             "amount": "75000",
             "sandbox": true,
-            "publicKey": "02e181a0653511ef8a1de375275411b5",
-            "privateKey": "tpk_02e181a2653511ef8a1de375275411b5",
-            "secret": "tsk_02e181a3653511ef8a1de375275411b5",
+            "publicKey": "pk_sandbox_MXxoe0yc_OLA4Is7OKjUoctO",
+            "privateKey": "sk_sandbox_NVpQj_wnidxcAk8BPv7iqgYO",
+            "secret": "sk_sandbox_NVpQj_wnidxcAk8BPv7iqgYO",
             "transitions": {
                 "type": "single",
                 "nextStage": "gen-extract",
@@ -102,7 +91,7 @@
         },
         "payment_faitiere_non": {
             "type": "genericpayment",
-            "provider" : "fedapay",
+            "provider": "kkiapay",
             "amount": "50000",
             "sandbox": true,
             "publicKey": "02e181a0653511ef8a1de375275411b5",
@@ -162,27 +151,27 @@
             "subjectTemplate": "Enregistrement ONG",
             "transitions": {
                 "type": "single",
-                "nextStage": "REQUESTED"
+                "nextStage": "REQUESTED-SA"
             }
         },
-        "REQUESTED": {
+        "REQUESTED-SA": {
             "type": "main",
             "shortTitle": {
                 "en": "REQUESTED",
                 "fr": "DEMANDÉ"
             },
             "title": {
-                "en": "REQUESTED",
-                "fr": "DEMANDÉ"
+                "en": "REQUEST DONE",
+                "fr": "DEMANDE EFFECTUÉE"
             },
             "flags": [],
             "transitions": [
                 {
                     "id": "registration_official-review",
-                    "nextStage": "secretary",
+                    "nextStage": "first-step",
                     "title": {
-                        "en": "REQUESTED",
-                        "fr": "DEMANDÉ"
+                        "en": "SECRETARIAT ADMINISTRATIF",
+                        "fr": "SECRETARIAT ADMINISTRATIF"
                     },
                     "resultMainStages": [
                         "ISSUED",
@@ -199,131 +188,300 @@
                 }
             ]
         },
-        "secretary": {
+        "first-step": {
             "type": "ui",
-            "uiConfiguration": "secretary.json",
+            "uiConfiguration": "first-step.json",
             "transitions": {
                 "type": "map-by-meta",
                 "metaPathToKey": [
                     "conformite-review"
                 ],
                 "map": {
-                    "accept": "email_gen_secretary",
-                    "rejected": "email_req_rejected"
+                    "accept": "citizen-notification-accepted",
+                    "rejected": "citizen-notification-rejected"
                 },
                 "onStageException": {
-                    "REQUIRED_FIELDS_MISSING": "secretary",
-                    "FIELDS_NOT_ALLOWED": "secretary"
+                    "REQUIRED_FIELDS_MISSING": "first-step",
+                    "FIELDS_NOT_ALLOWED": "first-step"
                 }
             }
         },
-        "email_gen_secretary": {
+        "citizen-notification-accepted": {
             "type": "email",
-            "bodyTemplatePath": "general-secretary.txt",
-            "targetType": "email-file",
-            "targetsFile": "sg-emails.txt",
-            "subjectTemplate": "Nouvelle demande d'enregistrement ONG",
-            "transitions": {
-                "type": "single",
-                "nextStage": "general_secretary"
-            }
-        },
-        "email_req_rejected": {
-            "type": "email",
-            "bodyTemplatePath": "req-rejected.txt",
+            "bodyTemplatePath": "accepted-email-citizen.txt",
             "targetType": "path-to-email",
             "targetPath": "metaData.email",
-            "subjectTemplate": "Votre demande d'enregistrement ONG/Association a été rejetée.",
+            "subjectTemplate": "Statut de la demande d'enregistrement ONG",
+            "transitions": {
+                "type": "single",
+                "nextStage": "REQUESTED-SG"
+            }
+        },
+        "citizen-notification-rejected": {
+            "type": "email",
+            "bodyTemplatePath": "rejected-email-citizen.txt",
+            "targetType": "path-to-email",
+            "targetPath": "metaData.email",
+            "subjectTemplate": "Statut de la demande d'enregistrement ONG",
+            "transitions": {
+                "type": "single",
+                "nextStage": "REQUESTED-SA"
+            }
+        },
+        "REQUESTED-SG": {
+            "type": "main",
+            "shortTitle": {
+                "en": "REQUESTED",
+                "fr": "DEMANDÉ"
+            },
+            "title": {
+                "en": "REQUESTED",
+                "fr": "SECRETARIAT ADMINISTRATIF"
+            },
+            "flags": [],
+            "transitions": [
+                {
+                    "id": "registration_official-review-sg",
+                    "nextStage": "second-step-SG",
+                    "title": {
+                        "en": "SECRETAIRE GENERAL",
+                        "fr": "SECRETAIRE GENERAL"
+                    },
+                    "resultMainStages": [
+                        "ISSUED",
+                        "REJECTED"
+                    ],
+                    "permissions": {
+                        "type": "hardcoded-array",
+                        "actor": "OFFICIAL",
+                        "array": [
+                            "GRP_ACC_ALL",
+                            "Test User"
+                        ]
+                    }
+                }
+            ]
+        },
+        "second-step-SG": {
+            "type": "ui",
+            "uiConfiguration": "second-step-SG.json",
+            "transitions": {
+                "type": "map-by-meta",
+                "metaPathToKey": [
+                    "conformite-review"
+                ],
+                "map": {
+                    "accept": "citizen-notification-accepted-SG",
+                    "rejected": "citizen-notification-rejected-SG"
+                },
+                "onStageException": {
+                    "REQUIRED_FIELDS_MISSING": "second-step-SG",
+                    "FIELDS_NOT_ALLOWED": "second-step-SG"
+                }
+            }
+        },
+        "citizen-notification-accepted-SG": {
+            "type": "email",
+            "bodyTemplatePath": "accepted-email-citizen-by-SG.txt",
+            "targetType": "path-to-email",
+            "targetPath": "metaData.email",
+            "subjectTemplate": "Statut de la demande d'enregistrement ONG",
+            "transitions": {
+                "type": "single",
+                "nextStage": "REQUESTED-SAG"
+            }
+        },
+        "citizen-notification-rejected-SG": {
+            "type": "email",
+            "bodyTemplatePath": "rejected-email-citizen-by-SG.txt",
+            "targetType": "path-to-email",
+            "targetPath": "metaData.email",
+            "subjectTemplate": "Statut de la demande d'enregistrement ONG",
+            "transitions": {
+                "type": "single",
+                "nextStage": "REQUESTED-SG"
+            }
+        },
+        "REQUESTED-SAG": {
+            "type": "main",
+            "shortTitle": {
+                "en": "REQUESTED",
+                "fr": "DEMANDÉ"
+            },
+            "title": {
+                "en": "REQUESTED",
+                "fr": "SECRETAIRE GENERAL"
+            },
+            "flags": [],
+            "transitions": [
+                {
+                    "id": "registration_official-review-sag",
+                    "nextStage": "decision-SAG",
+                    "title": {
+                        "en": "SERVICE DES AFFAIRES GENERALES (SAG)",
+                        "fr": "SERVICE DES AFFAIRES GENERALES (SAG)"
+                    },
+                    "resultMainStages": [
+                        "ISSUED",
+                        "REJECTED"
+                    ],
+                    "permissions": {
+                        "type": "hardcoded-array",
+                        "actor": "OFFICIAL",
+                        "array": [
+                            "GRP_ACC_ALL",
+                            "Test User"
+                        ]
+                    }
+                }
+            ]
+        },
+        "decision-SAG": {
+            "type": "ui",
+            "uiConfiguration": "decision-SAG.json",
+            "transitions": {
+                "type": "map-by-meta",
+                "metaPathToKey": [
+                    "conformite-review"
+                ],
+                "map": {
+                    "accept": "mail-accept-by-SAG",
+                    "rejected": "mail-rejected-by-SAG"
+                },
+                "onStageException": {
+                    "REQUIRED_FIELDS_MISSING": "decision-SAG",
+                    "FIELDS_NOT_ALLOWED": "decision-SAG"
+                }
+            }
+        },
+        "mail-accept-by-SAG": {
+            "type": "email",
+            "bodyTemplatePath": "notify-citizen-accept-by-SAG.txt",
+            "targetType": "path-to-email",
+            "targetPath": "metaData.adresse_email",
+            "subjectTemplate": "Statut de votre dossier par le Service des Affaires Générales (SAG)",
+            "transitions": {
+                "type": "single",
+                "nextStage": "REQUESTED-PF"
+            }
+        },
+        "mail-rejected-by-SAG": {
+            "type": "email",
+            "bodyTemplatePath": "notify-rejected-accept-by-SAG.txt",
+            "targetType": "path-to-email",
+            "targetPath": "metaData.adresse_email",
+            "subjectTemplate": "Statut de votre dossier par le Service des Affaires Générales (SAG)",
+            "transitions": {
+                "type": "single",
+                "nextStage": "REQUESTED-SAG"
+            }
+        },
+        "REQUESTED-PF": {
+            "type": "main",
+            "shortTitle": {
+                "en": "REQUESTED",
+                "fr": "DEMANDÉ"
+            },
+            "title": {
+                "en": "REQUESTED",
+                "fr": "SERVICE DES AFFAIRES GENERALES (SAG)"
+            },
+            "flags": [],
+            "transitions": [
+                {
+                    "id": "registration_official-review-pf",
+                    "nextStage": "decision-PF",
+                    "title": {
+                        "en": "PREFET",
+                        "fr": "PREFET"
+                    },
+                    "resultMainStages": [
+                        "ISSUED",
+                        "REJECTED"
+                    ],
+                    "permissions": {
+                        "type": "hardcoded-array",
+                        "actor": "OFFICIAL",
+                        "array": [
+                            "GRP_ACC_ALL",
+                            "Test User"
+                        ]
+                    }
+                }
+            ]
+        },
+        "decision-PF": {
+            "type": "ui",
+            "uiConfiguration": "decision-PF.json",
+            "transitions": {
+                "type": "map-by-meta",
+                "metaPathToKey": [
+                    "conformite-review"
+                ],
+                "map": {
+                    "accept": "gen-extract-attestation",
+                    "rejected": "mail-rejected-by-PF"
+                },
+                "onStageException": {
+                    "REQUIRED_FIELDS_MISSING": "decision-PF",
+                    "FIELDS_NOT_ALLOWED": "decision-PF"
+                }
+            }
+        },
+        "gen-extract-attestation": {
+            "type": "gen-document",
+            "template": "attestation-ong-association.html",
+            "fileName": "attestation-ong-association.pdf",
+            "transitions": {
+                "type": "single",
+                "nextStage": "share-generate-certificate",
+                "onStageException": {
+                    "NO_TEMPLATE": "payment-done",
+                    "READING_FILE_CONTENT_FAILED": "payment-done",
+                    "PERSISTING_FILE_CONTENT_FAILED": "payment-done",
+                    "API_EXCEPTION": "payment-done",
+                    "CONNECTION_ERROR": "payment-done"
+                }
+            }
+        },
+        "share-generate-certificate": {
+            "type": "share-one-pdf",
+            "transitions": {
+                "type": "single",
+                "nextStage": "email-citizen-issued"
+            }
+        },
+        "email-citizen-issued": {
+            "type": "email",
+            "bodyTemplatePath": "notify-citizen-accept-by-PF.txt",
+            "targetType": "path-to-email",
+            "targetPath": "metaData.email",
+            "subjectTemplate": "Statut définitif de votre demande",
+            "transitions": {
+                "type": "single",
+                "nextStage": "ISSUED"
+            }
+        },
+        "mail-rejected-by-PF": {
+            "type": "email",
+            "bodyTemplatePath": "notify-rejected-accept-by-PF.txt",
+            "targetType": "path-to-email",
+            "targetPath": "metaData.email",
+            "subjectTemplate": "Statut définitif de votre demande",
             "transitions": {
                 "type": "single",
                 "nextStage": "REJECTED"
-            }
-        },
-        "general_secretary": {
-            "type": "ui",
-            "uiConfiguration": "general_secretary.json",
-            "transitions": {
-                "type": "map-by-meta",
-                "metaPathToKey": [
-                    "conformite-review"
-                ],
-                "map": {
-                    "accept": "email_study_office",
-                    "rejected": "email_req_rejected"
-                },
-                "onStageException": {
-                    "REQUIRED_FIELDS_MISSING": "general_secretary",
-                    "FIELDS_NOT_ALLOWED": "general_secretary"
-                }
-            }
-        },
-        "email_study_office": {
-            "type": "email",
-            "bodyTemplatePath": "study-office.txt",
-            "targetType": "email-file",
-            "targetsFile": "study-emails.txt",
-            "subjectTemplate": "Nouvelle demande d'enregistrement ONG",
-            "transitions": {
-                "type": "single",
-                "nextStage": "study_office"
-            }
-        },
-        "study_office": {
-            "type": "ui",
-            "uiConfiguration": "study_office.json",
-            "transitions": {
-                "type": "map-by-meta",
-                "metaPathToKey": [
-                    "conformite-review"
-                ],
-                "map": {
-                    "accept": "prefet",
-                    "rejected": "email_req_rejected"
-                },
-                "onStageException": {
-                    "REQUIRED_FIELDS_MISSING": "study_office",
-                    "FIELDS_NOT_ALLOWED": "study_office"
-                }
-            }
-        },
-        "email_prefet": {
-            "type": "email",
-            "bodyTemplatePath": "prefet.txt",
-            "targetType": "email-file",
-            "targetsFile": "prefet-emails.txt",
-            "subjectTemplate": "Nouvelle demande d'enregistrement ONG à valider",
-            "transitions": {
-                "type": "single",
-                "nextStage": "prefet"
-            }
-        },
-        "prefet": {
-            "type": "ui",
-            "uiConfiguration": "prefet.json",
-            "transitions": {
-                "type": "map-by-meta",
-                "metaPathToKey": [
-                    "conformite-review"
-                ],
-                "map": {
-                    "accept": "ISSUED",
-                    "rejected": "email_req_rejected"
-                },
-                "onStageException": {
-                    "REQUIRED_FIELDS_MISSING": "prefet",
-                    "FIELDS_NOT_ALLOWED": "prefet"
-                }
             }
         },
         "ISSUED": {
             "type": "main",
             "shortTitle": {
                 "en": "ACCEPTED",
-                "fr": "ACCEPTÉ"
+                "fr": "ACCEPTEÉ"
             },
             "title": {
-                "en": "Your request was accepted",
-                "fr": "Votre demande a été approuvée"
+                "en": "Application for NGO or association registration accepted",
+                "fr": "Demande d'enregistrement d'ONG ou association acceptée"
             },
             "flags": [
                 "final",
@@ -334,16 +492,16 @@
         "REJECTED": {
             "type": "main",
             "shortTitle": {
-                "en": "REQUESTED",
+                "en": "REJECTED",
                 "fr": "REJETÉ"
             },
             "title": {
-               "en": "Your request was rejected",
-                "fr": "Votre demande a été rejetée"
+                "en": "Application for NGO or association registration rejected",
+                "fr": "Demande d'enregistrement d'ONG ou association rejetée"
             },
             "flags": [
                 "final",
-                "rejected"
+                "reject"
             ],
             "transitions": []
         }

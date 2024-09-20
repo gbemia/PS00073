@@ -1,0 +1,97 @@
+{
+    "validation": [
+        {
+            "requiredPaths": [
+                "metaData.conformite-review"
+            ]
+        },
+        {
+            "pathCondition": {
+                "metaData.conformite-review": "rejected"
+            },
+            "requiredPaths": [
+                "metaData._comment"
+            ]
+        }
+    ],
+    "steps": [
+        {
+            "rows": [
+                {
+                    "fields": [
+                        {
+                            "type": "STATIC_RADIO_LIST",
+                            "path": "metaData.conformite-review",
+                            "listValues": [
+                                {
+                                    "name": {
+                                        "en": "Débuter le traitement de la demande",
+                                        "fr": "Débuter le traitement de la demande"
+                                    },
+                                    "id": "accept"
+                                },
+                                {
+                                    "name": {
+                                        "en": "Rejeter le traitement de la demande",
+                                        "fr": "Rejeter le traitement de la demande"
+                                    },
+                                    "id": "rejected"
+                                }
+                            ],
+                            "itemIdPath": "id",
+                            "label": {
+                                "en": "Study decision (SA) : ",
+                                "fr": "Décision prise pour cette demande (SA) : "
+                            },
+                            "children": [
+                                {
+                                    "type": "TEXT",
+                                    "sourcePath": "name"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "fields": [
+                        {
+                            "type": "TEXTAREA",
+                            "targetPath": "metaData._comment",
+                            "label": {
+                                "en": "Commentaire interne (Optionnel)",
+                                "fr": "Commentaire interne (Optionnel)"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "preCondition": {
+                        "dataPath": "metaData.conformite-review",
+                        "value": "rejected"
+                    },
+                    "fields": [
+                        {
+                            "type": "TEXTAREA",
+                            "path": "metaData._comment",
+                            "label": {
+                                "en": "Reason for rejection :",
+                                "fr": "Raison du rejet de la demande :"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "fields": [
+                        {
+                            "type": "SUBMIT",
+                            "label": {
+                                "en": "Submit",
+                                "fr": "Soumettre"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
