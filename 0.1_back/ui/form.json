@@ -10,11 +10,7 @@
                 "data.activity_vpr_name",
                 "data.activity_general_secretary",
                 "data.activity_general_treasurer",
-                "data.departement",
-                "data.adresse_vil",
-                "metaData.email",
-                "data.phone",
-                "data.activity_date"
+                "metaData.email"
             ]
         }
     ],
@@ -196,7 +192,7 @@
         {
             "title": {
                 "en": "",
-                "fr": "Adresse de résidence"
+                "fr": "Adresse"
             },
             "rows": [
                 {
@@ -6679,7 +6675,7 @@
         {
             "title": {
                 "en": "",
-                "fr": "Pièces à fournir"
+                "fr": "Pièces à Fournir"
             },
             "rows": [
                 {

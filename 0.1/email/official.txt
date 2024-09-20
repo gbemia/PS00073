@@ -1,1 +1,6 @@
-Demande d'enregistrement d'ONG ou d'associtions reçue via le PNS.
+Demande d'enregistrement d'une ONG ou assocition : ${data.general_company_name} reçue via le PNS.
+Lien de la demande : 
+<a href="${vars.officialPortalBaseUrl}/applications/${vars.applicationId}">${vars.officialPortalBaseUrl}/applications/${vars.applicationId}</a>
+
+Lien des pièces jointes : 
+<a href="${data.files.baseUrl}/api/portal/shared/files/${data.files.code}">${data.files.baseUrl}/api/portal/shared/files/${data.files.code}</a>

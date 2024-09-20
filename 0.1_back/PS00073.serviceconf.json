@@ -1,0 +1,351 @@
+{
+    "public": true,
+    "serviceId": "PS00073",
+    "serviceVersion": "0.1",
+    "stages": {
+        "start": {
+            "type": "start",
+            "shortTitle": {
+                "en": "STARTED",
+                "fr": "DÉBUT"
+            },
+            "title": {
+                "en": "Application started",
+                "fr": "Demande soumise"
+            },
+            "transitions": {
+                "type": "single",
+                "nextStage": "informations"
+            },
+            "pathTitle": {
+                "en": "Continue application",
+                "fr": "Poursuivre la demande"
+            },
+            "permissions": {
+                "type": "meta-array",
+                "actor": "CITIZEN",
+                "metaPathToArray": [
+                    "citizen"
+                ],
+                "public": true
+            }
+        },
+        "informations": {
+            "type": "ui",
+            "uiConfiguration": "informations.json",
+            "transitions": {
+                "type": "single",
+                "nextStage": "form",
+                "onStageException": {
+                    "REQUIRED_FIELDS_MISSING": "informations",
+                    "FIELDS_NOT_ALLOWED": "informations"
+                }
+            }
+        },
+        "informations2": {
+            "type": "ui",
+            "uiConfiguration": "informations2.json",
+            "transitions": {
+                "type": "single",
+                "nextStage": "form",
+                "onStageException": {
+                    "REQUIRED_FIELDS_MISSING": "informations",
+                    "FIELDS_NOT_ALLOWED": "informations"
+                }
+            }
+        },
+        "form": {
+            "type": "ui",
+            "uiConfiguration": "form.json",
+            "transitions": {
+                "type": "single",
+                "nextStage": "gen-extract",
+                "onStageException": {
+                    "REQUIRED_FIELDS_MISSING": "informations",
+                    "FIELDS_NOT_ALLOWED": "informations"
+                }
+            }
+        },
+        "pay_switch": {
+            "type": "hardcoded-data",
+            "writeData": {
+                "metaData": {
+                    "pay": "notDone"
+                }
+            },
+            "transitions": {
+                "type": "map-by-meta",
+                "metaPathToKey": [
+                    "faitiere"
+                ],
+                "map": {
+                    "Oui": "payment_faitiere_oui",
+                    "Non": "payment_faitiere_non"
+                }
+            }
+        },
+        "payment_faitiere_oui": {
+            "type": "genericpayment",
+            "provider" : "fedapay",
+            "amount": "75000",
+            "sandbox": true,
+            "publicKey": "02e181a0653511ef8a1de375275411b5",
+            "privateKey": "tpk_02e181a2653511ef8a1de375275411b5",
+            "secret": "tsk_02e181a3653511ef8a1de375275411b5",
+            "transitions": {
+                "type": "single",
+                "nextStage": "gen-extract",
+                "onStageException": {
+                    "PAYMENT_FAILED": "payment_faitiere_oui"
+                }
+            }
+        },
+        "payment_faitiere_non": {
+            "type": "genericpayment",
+            "provider" : "fedapay",
+            "amount": "50000",
+            "sandbox": true,
+            "publicKey": "02e181a0653511ef8a1de375275411b5",
+            "privateKey": "tpk_02e181a2653511ef8a1de375275411b5",
+            "secret": "tsk_02e181a3653511ef8a1de375275411b5",
+            "transitions": {
+                "type": "single",
+                "nextStage": "gen-extract",
+                "onStageException": {
+                    "PAYMENT_FAILED": "payment_faitiere_non"
+                }
+            }
+        },
+        "gen-extract": {
+            "type": "gen-document",
+            "template": "ong-association.html",
+            "fileName": "enregistrement-ong-association.pdf",
+            "transitions": {
+                "type": "single",
+                "nextStage": "share-files",
+                "onStageException": {
+                    "NO_TEMPLATE": "payment-done",
+                    "READING_FILE_CONTENT_FAILED": "payment-done",
+                    "PERSISTING_FILE_CONTENT_FAILED": "payment-done",
+                    "API_EXCEPTION": "payment-done",
+                    "CONNECTION_ERROR": "payment-done"
+                }
+            }
+        },
+        "share-files": {
+            "type": "share-files",
+            "codePath": "data.files.code",
+            "baseUrlPath": "data.files.baseUrl",
+            "fileNamePath": "data.files.name",
+            "zipFileName": "Enregistrement ONG-Association",
+            "transitions": {
+                "type": "single",
+                "nextStage": "email-official"
+            }
+        },
+        "email-official": {
+            "type": "email",
+            "bodyTemplatePath": "official.txt",
+            "targetType": "email-file",
+            "targetsFile": "official-emails.txt",
+            "subjectTemplate": "Enregistrement ONG",
+            "transitions": {
+                "type": "single",
+                "nextStage": "email-citizen"
+            }
+        },
+        "email-citizen": {
+            "type": "email",
+            "bodyTemplatePath": "citizen.txt",
+            "targetType": "path-to-email",
+            "targetPath": "metaData.email",
+            "subjectTemplate": "Enregistrement ONG",
+            "transitions": {
+                "type": "single",
+                "nextStage": "REQUESTED"
+            }
+        },
+        "REQUESTED": {
+            "type": "main",
+            "shortTitle": {
+                "en": "REQUESTED",
+                "fr": "DEMANDÉ"
+            },
+            "title": {
+                "en": "REQUESTED",
+                "fr": "DEMANDÉ"
+            },
+            "flags": [],
+            "transitions": [
+                {
+                    "id": "registration_official-review",
+                    "nextStage": "secretary",
+                    "title": {
+                        "en": "SECRETARIAT ADMINISTRATIF",
+                        "fr": "SECRETARIAT ADMINISTRATIF"
+                    },
+                    "resultMainStages": [
+                        "ISSUED",
+                        "REJECTED"
+                    ],
+                    "permissions": {
+                        "type": "hardcoded-array",
+                        "actor": "OFFICIAL",
+                        "array": [
+                            "GRP_ACC_ALL",
+                            "Test User"
+                        ]
+                    }
+                }
+            ]
+        },
+        "secretary": {
+            "type": "ui",
+            "uiConfiguration": "secretary.json",
+            "transitions": {
+                "type": "map-by-meta",
+                "metaPathToKey": [
+                    "conformite-review"
+                ],
+                "map": {
+                    "accept": "email_gen_secretary",
+                    "rejected": "email_req_rejected"
+                },
+                "onStageException": {
+                    "REQUIRED_FIELDS_MISSING": "secretary",
+                    "FIELDS_NOT_ALLOWED": "secretary"
+                }
+            }
+        },
+        "email_gen_secretary": {
+            "type": "email",
+            "bodyTemplatePath": "general-secretary.txt",
+            "targetType": "email-file",
+            "targetsFile": "sg-emails.txt",
+            "subjectTemplate": "Nouvelle demande d'enregistrement ONG",
+            "transitions": {
+                "type": "single",
+                "nextStage": "general_secretary"
+            }
+        },
+        "email_req_rejected": {
+            "type": "email",
+            "bodyTemplatePath": "req-rejected.txt",
+            "targetType": "path-to-email",
+            "targetPath": "metaData.email",
+            "subjectTemplate": "Votre demande d'enregistrement ONG/Association a été rejetée.",
+            "transitions": {
+                "type": "single",
+                "nextStage": "REJECTED"
+            }
+        },
+        "general_secretary": {
+            "type": "ui",
+            "uiConfiguration": "general_secretary.json",
+            "transitions": {
+                "type": "map-by-meta",
+                "metaPathToKey": [
+                    "conformite-review"
+                ],
+                "map": {
+                    "accept": "email_study_office",
+                    "rejected": "email_req_rejected"
+                },
+                "onStageException": {
+                    "REQUIRED_FIELDS_MISSING": "general_secretary",
+                    "FIELDS_NOT_ALLOWED": "general_secretary"
+                }
+            }
+        },
+        "email_study_office": {
+            "type": "email",
+            "bodyTemplatePath": "study-office.txt",
+            "targetType": "email-file",
+            "targetsFile": "study-emails.txt",
+            "subjectTemplate": "Nouvelle demande d'enregistrement ONG",
+            "transitions": {
+                "type": "single",
+                "nextStage": "study_office"
+            }
+        },
+        "study_office": {
+            "type": "ui",
+            "uiConfiguration": "study_office.json",
+            "transitions": {
+                "type": "map-by-meta",
+                "metaPathToKey": [
+                    "conformite-review"
+                ],
+                "map": {
+                    "accept": "prefet",
+                    "rejected": "email_req_rejected"
+                },
+                "onStageException": {
+                    "REQUIRED_FIELDS_MISSING": "study_office",
+                    "FIELDS_NOT_ALLOWED": "study_office"
+                }
+            }
+        },
+        "email_prefet": {
+            "type": "email",
+            "bodyTemplatePath": "prefet.txt",
+            "targetType": "email-file",
+            "targetsFile": "prefet-emails.txt",
+            "subjectTemplate": "Nouvelle demande d'enregistrement ONG à valider",
+            "transitions": {
+                "type": "single",
+                "nextStage": "prefet"
+            }
+        },
+        "prefet": {
+            "type": "ui",
+            "uiConfiguration": "prefet.json",
+            "transitions": {
+                "type": "map-by-meta",
+                "metaPathToKey": [
+                    "conformite-review"
+                ],
+                "map": {
+                    "accept": "ISSUED",
+                    "rejected": "email_req_rejected"
+                },
+                "onStageException": {
+                    "REQUIRED_FIELDS_MISSING": "prefet",
+                    "FIELDS_NOT_ALLOWED": "prefet"
+                }
+            }
+        },
+        "ISSUED": {
+            "type": "main",
+            "shortTitle": {
+                "en": "ACCEPTED",
+                "fr": "ACCEPTÉ"
+            },
+            "title": {
+                "en": "Your request was accepted",
+                "fr": "Votre demande a été approuvée"
+            },
+            "flags": [
+                "final",
+                "accept"
+            ],
+            "transitions": []
+        },
+        "REJECTED": {
+            "type": "main",
+            "shortTitle": {
+                "en": "REQUESTED",
+                "fr": "REJETÉ"
+            },
+            "title": {
+               "en": "Your request was rejected",
+                "fr": "Votre demande a été rejetée"
+            },
+            "flags": [
+                "final",
+                "rejected"
+            ],
+            "transitions": []
+        }
+    }
+}

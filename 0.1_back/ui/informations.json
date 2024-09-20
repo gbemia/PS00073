@@ -66,8 +66,8 @@
                   {                         
                     "type": "SUBMIT",
                     "label": {
-                        "fr": "Faire une demande",
-                        "en": "Faire une demande"
+                        "fr": "Continuer",
+                        "en": "Continuer"
                     }
                   }
                 ]                   

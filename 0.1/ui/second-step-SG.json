@@ -1,0 +1,98 @@
+{
+    "validation": [
+      {
+        "requiredPaths": [
+          "metaData.conformite-review"
+        ]
+      },
+      {
+        "pathCondition": {
+          "metaData.conformite-review": "rejected"
+        },
+        "requiredPaths": [
+          "metaData.reasonSG"
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "rows": [
+          {
+            "fields": [
+              {
+                "type": "STATIC_RADIO_LIST",
+                "path": "metaData.conformite-review",
+                "listValues": [
+                  {
+                    "name": {
+                      "en": "Valider",
+                      "fr": "Valider"
+                    },
+                    "id": "accept"
+                  },
+                  {
+                    "name": {
+                      "en": "Rejeter",
+                      "fr": "Rejeter"
+                    },
+                    "id": "rejected"
+                  }
+                ],
+                "itemIdPath": "id",
+                "label": {
+                  "en": "Study decision (SG) : ",
+                  "fr": "Décision prise pour cette demande (SG) : "
+                },
+                "children": [
+                  {
+                    "type": "TEXT",
+                    "sourcePath": "name"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "fields": [
+              {
+                "type": "TEXTAREA",
+                "targetPath": "metaData._comment",
+                "label": {
+                  "en": "Commentaire interne (Optionnel)",
+                  "fr": "Commentaire interne (Optionnel)"
+                }
+              }
+            ]
+          },
+          {
+            "preCondition": {
+              "dataPath": "metaData.conformite-review",
+              "value": "rejected"
+            },
+            "fields": [
+              {
+                "type": "TEXTAREA",
+                "path": "metaData.reasonSG",
+                "label": {
+                  "en": "Reason for rejection:",
+                  "fr": "Raison du rejet de la demande"
+                }
+              }
+            ]
+          },
+          {
+            "fields": [
+              {
+                "type": "SUBMIT",
+                "label": {
+                  "en": "Submit",
+                  "fr": "Soumettre"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+   }
+   

@@ -1,0 +1,3 @@
+Votre demande d'enregistrement de l'ONG / association ${data.general_company_name} a été définitivement acceptée.
+
+<a href="${vars.citizenPortalBaseUrl}/api/portal/application/file/${data.pdf-code}">Cliquez ici pour télécharger votre document</a>
